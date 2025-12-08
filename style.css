@@ -1,0 +1,242 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #050816;
+  --bg-card: #111827;
+  --bg-hero: #020617;
+  --border-subtle: rgba(148, 163, 184, 0.22);
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --accent-blue: #38bdf8;
+  --accent-teal: #06b6d4;
+  --accent-green: #22c55e;
+  --accent-pink: #ec4899;
+}
+
+/* Page */
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter",
+    "SF Pro Text", sans-serif;
+  background: radial-gradient(circle at top left, #020617, #050816 45%, #020617);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+/* Hero */
+
+.hero {
+  padding: 56px 24px 28px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  background: radial-gradient(circle at top right, #0b1120, #020617);
+}
+
+.hero-inner {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-teal);
+  margin-bottom: 6px;
+}
+
+.hero h1 {
+  font-size: 2.7rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+
+.hero-subtitle {
+  max-width: 640px;
+  font-size: 0.98rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.hero-byline {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 14px;
+}
+
+/* Hero nav */
+
+.hero-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.hero-nav a {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: var(--text-muted);
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(15, 23, 42, 0.9);
+  transition: all 0.18s ease-out;
+}
+
+.hero-nav a:hover {
+  color: var(--text-main);
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35),
+    0 0 26px rgba(15, 23, 42, 0.9);
+}
+
+/* Main */
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* Data cards */
+
+.data-card {
+  margin-bottom: 40px;
+  padding: 32px 26px 36px;
+  background: radial-gradient(circle at top left, #111827, #020617 60%);
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 26px 70px rgba(15, 23, 42, 0.9);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle corner glow */
+.data-card::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent);
+  top: -60px;
+  right: -40px;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.data-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.data-card h2 {
+  font-size: 1.55rem;
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
+}
+
+.description {
+  font-size: 0.96rem;
+  color: var(--text-muted);
+  max-width: 720px;
+  margin-bottom: 16px;
+  line-height: 1.55;
+}
+
+/* Canvas */
+
+canvas {
+  margin-top: 6px;
+  width: 100% !important;
+  height: 340px !important;
+  filter: drop-shadow(0 0 14px rgba(8, 47, 73, 0.9));
+}
+
+/* Footer */
+
+.site-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.22);
+  padding: 18px 24px 32px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Responsive */
+
+@media (max-width: 720px) {
+  .hero {
+    padding: 32px 16px 20px;
+  }
+
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .page {
+    padding: 22px 16px 60px;
+  }
+
+  .data-card {
+    padding: 22px 18px 26px;
+  }
+
+  canvas {
+    height: 260px !important;
+  }
+}
+#slideshow-container {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+.slide {
+  width: 100vw;
+  height: 100vh;
+  padding: 60px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  opacity: 0;
+  transition: all 0.8s ease;
+}
+
+.slide.active {
+  left: 0;
+  opacity: 1;
+}
+
+.slide-content {
+  max-width: 760px;
+}
+
+.nav-button {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.3);
+  border: none;
+  padding: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 32px;
+}
+
+#prevBtn {
+  left: 20px;
+}
+
+#nextBtn {
+  right: 20px;
+}
