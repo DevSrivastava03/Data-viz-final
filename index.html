@@ -1,759 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>Would Faith Hill Still Be a Hit?</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root { 
-      --pink: #FF1B8D; 
-      --purple: #9D4EDD; 
-      --blue: #00D9FF; 
-      --orange: #FF6B35;
-      --yellow: #FFC857;
-      --green: #06FFA5;
-      --black: #0a0014;
-      --card: #1a0b2e;
-      --gray: #a1a1aa;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes flow { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-    @keyframes float { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(20px, -20px) rotate(5deg); } }
-    @keyframes glow { 0%, 100% { box-shadow: 0 0 40px rgba(255, 27, 141, 0.4), 0 0 80px rgba(157, 78, 221, 0.2); } 50% { box-shadow: 0 0 60px rgba(255, 27, 141, 0.6), 0 0 100px rgba(157, 78, 221, 0.3); } }
-    
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; 
-      background: var(--black); 
-      color: #fff; 
-      line-height: 1.7; 
-      overflow-x: hidden; 
-    }
-    
-    .hero { 
-      min-height: 100vh; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      background: linear-gradient(135deg, #0a0014 0%, #1a0b2e 30%, #16001e 70%, #0a0014 100%); 
-      background-size: 400% 400%; 
-      animation: flow 12s ease infinite; 
-      padding: 3rem 2rem; 
-      position: relative; 
-      overflow: hidden; 
-    }
-    
-    .hero::before { 
-      content: ''; 
-      position: absolute; 
-      width: 600px; 
-      height: 600px; 
-      background: radial-gradient(circle, rgba(255, 27, 141, 0.25), transparent 70%); 
-      top: -200px; 
-      right: -100px; 
-      animation: float 8s ease-in-out infinite;
-      pointer-events: none; 
-    }
-    
-    .hero::after { 
-      content: ''; 
-      position: absolute; 
-      width: 500px; 
-      height: 500px; 
-      background: radial-gradient(circle, rgba(0, 217, 255, 0.2), transparent 70%); 
-      bottom: -150px; 
-      left: -150px; 
-      animation: float 10s ease-in-out infinite 2s;
-      pointer-events: none; 
-    }
-    
-    .hero-content { max-width: 1200px; position: relative; z-index: 1; animation: fadeIn 1s ease-out; }
-    .hero-tag { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue); margin-bottom: 2rem; font-weight: 700; text-shadow: 0 0 20px rgba(0, 217, 255, 0.6); }
-    .hero-title { font-size: clamp(3rem, 12vw, 9rem); font-weight: 900; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 2.5rem; background: linear-gradient(135deg, #fff 0%, var(--pink) 40%, var(--purple) 70%, var(--blue) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 80px rgba(255, 27, 141, 0.3); }
-    .hero-subtitle { font-size: clamp(1.1rem, 2.5vw, 1.6rem); max-width: 900px; line-height: 1.6; color: #d4d4d8; margin-bottom: 1rem; font-weight: 300; }
-    .hero-subtitle strong { color: var(--pink); font-weight: 700; }
-    .hero-author { font-size: 1rem; color: var(--gray); margin-bottom: 3rem; font-weight: 500; }
-    
-    .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; max-width: 900px; }
-    .nav-link { 
-      display: block; 
-      padding: 1.2rem 1.5rem; 
-      background: rgba(255, 255, 255, 0.05); 
-      border: 2px solid rgba(255, 255, 255, 0.1); 
-      border-radius: 16px; 
-      color: #fff; 
-      text-decoration: none; 
-      font-size: 0.8rem; 
-      font-weight: 700; 
-      letter-spacing: 0.08em; 
-      text-transform: uppercase; 
-      text-align: center; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-      backdrop-filter: blur(20px); 
-    }
-    .nav-link:hover { 
-      background: linear-gradient(135deg, rgba(255, 27, 141, 0.3), rgba(157, 78, 221, 0.3)); 
-      border-color: var(--pink); 
-      transform: translateY(-4px) scale(1.02); 
-      box-shadow: 0 15px 50px rgba(255, 27, 141, 0.4); 
-    }
-    
-    .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
-    .section { padding: 12rem 0; position: relative; animation: fadeIn 0.8s ease-out; }
-    .section::after { content: ''; position: absolute; left: 10%; right: 10%; bottom: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 27, 141, 0.5), rgba(157, 78, 221, 0.5), transparent); }
-    .section-number { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; background: linear-gradient(90deg, var(--pink), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem; font-weight: 900; }
-    .section-title { font-size: clamp(2.5rem, 6vw, 5.5rem); font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 2rem; background: linear-gradient(135deg, #fff 20%, var(--pink) 60%, var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .section-description { font-size: clamp(1.1rem, 2vw, 1.5rem); line-height: 1.8; max-width: 900px; color: #d4d4d8; margin-bottom: 5rem; font-weight: 300; }
-    
-    .chart-card { 
-      background: linear-gradient(135deg, rgba(26, 11, 46, 0.9), rgba(22, 0, 30, 0.8)); 
-      border: 2px solid rgba(255, 27, 141, 0.2); 
-      border-radius: 32px; 
-      padding: 4rem; 
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1); 
-      backdrop-filter: blur(20px);
-    }
-    .chart-card:hover { 
-      border-color: rgba(255, 27, 141, 0.6); 
-      box-shadow: 0 35px 90px rgba(255, 27, 141, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15); 
-      transform: translateY(-10px); 
-    }
-    
-    .chart-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 2rem; font-weight: 700; }
-    .chart-wrapper { position: relative; height: 500px; margin-top: 2rem; }
-    
-    .custom-legend { display: flex; gap: 2.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
-    .legend-item { display: flex; align-items: center; gap: 0.75rem; }
-    .legend-dot { width: 18px; height: 18px; border-radius: 50%; position: relative; }
-    .legend-dot::after { content: ''; position: absolute; inset: -5px; border-radius: 50%; background: inherit; opacity: 0.4; filter: blur(10px); }
-    .legend-text { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.03em; }
-    
-    .insight { 
-      background: linear-gradient(135deg, rgba(255, 27, 141, 0.15), rgba(157, 78, 221, 0.15), rgba(0, 217, 255, 0.1)); 
-      border: 2px solid rgba(255, 27, 141, 0.3); 
-      border-radius: 24px; 
-      padding: 2.5rem; 
-      margin-top: 3rem; 
-      animation: glow 4s ease-in-out infinite; 
-    }
-    .insight-title { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 1rem; font-weight: 900; }
-    .insight-text { font-size: 1.15rem; line-height: 1.7; color: #fafafa; font-weight: 400; }
-    
-    .loading { text-align: center; padding: 4rem; color: var(--gray); font-size: 1.2rem; }
-    .footer { padding: 8rem 2rem 4rem; text-align: center; background: var(--black); border-top: 2px solid rgba(255, 27, 141, 0.2); }
-    .footer-text { font-size: 0.85rem; color: var(--gray); letter-spacing: 0.08em; font-weight: 500; }
-    
-    @media (max-width: 768px) { 
-      .section { padding: 8rem 0; } 
-      .chart-card { padding: 2rem; } 
-      .chart-wrapper { height: 350px; } 
-      .nav-grid { grid-template-columns: repeat(2, 1fr); } 
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Chart libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-tag">Data Visualization Final — Fall 2024</div>
-      <h1 class="hero-title">Would Faith Hill Still Be a Hit?</h1>
-      <p class="hero-subtitle">In 2000, Faith Hill's "Breathe" topped the Billboard Hot 100. Two decades of streaming, TikTok, and genre-blending later, the sound of a "hit" has changed dramatically. This project uses 24 years of Billboard + Spotify data to ask: <strong>would "Breathe" still go #1 in 2024?</strong></p>
-      <div class="hero-author">By Dev Srivastava</div>
-      
-      <nav class="nav-grid">
-        <a href="#decades" class="nav-link">Decades</a>
-        <a href="#tempo" class="nav-link">Tempo</a>
-        <a href="#loudness" class="nav-link">Loudness</a>
-        <a href="#length" class="nav-link">Length</a>
-        <a href="#acoustic" class="nav-link">Instruments</a>
-        <a href="#dance" class="nav-link">Dance</a>
-        <a href="#mood" class="nav-link">Mood</a>
-        <a href="#genre" class="nav-link">Genre</a>
-        <a href="#formula" class="nav-link">Formula</a>
-        <a href="#verdict" class="nav-link">Verdict</a>
-      </nav>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="hero-kicker">Parsons School of Design · Fall 2024</p>
+      <h1 class="hero-title">
+        Would Faith Hill<br />
+        <span class="hero-highlight">Still Be a Hit?</span>
+      </h1>
+      <p class="hero-lede">
+        In 2000, Faith Hill's <span class="hero-song">"Breathe"</span> finished the year as the top song on the
+        Billboard Hot 100. Since then, streaming platforms, playlists, and TikTok
+        have pulled the sound of a hit in new directions. This project looks at
+        twenty four years of Billboard entries paired with Spotify audio features
+        to ask a simple question: if "Breathe" came out today, would it still climb to number one?
+      </p>
+
+      <p class="hero-credit">
+        By Dev Srivastava · Data from Billboard year end charts and Spotify audio features
+      </p>
+
+      <div class="hero-meta-row">
+        <div class="hero-meta-card">
+          <p class="meta-label">Tempo trend</p>
+          <div class="meta-sparkline">
+            <canvas id="miniTempoSparkline"></canvas>
+          </div>
+          <p class="meta-caption">
+            Average tempo for hit songs from 2000 onward.
+          </p>
+        </div>
+        <div class="hero-meta-card">
+          <p class="meta-label">"Breathe" quick profile</p>
+          <ul class="meta-list">
+            <li><span>Tempo</span><strong id="fh-tempo">136 bpm</strong></li>
+            <li><span>Length</span><strong id="fh-length">4:10</strong></li>
+            <li><span>Mood</span><strong id="fh-valence">Bright</strong></li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </section>
+  </header>
 
-  <main class="container">
-    <section id="decades" class="section">
-      <div class="section-number">01 — Overview</div>
-      <h2 class="section-title">Three Decades, Three Sounds</h2>
-      <p class="section-description">How have hit songs evolved from 2000 to 2024? This chart reveals the average musical DNA of each decade—tempo that drives rhythm, valence that captures mood, and loudness that fights for attention.</p>
-      <div class="chart-card">
-        <div class="chart-label">Average Audio Features by Decade</div>
-        <div class="chart-wrapper"><canvas id="decadeChart"></canvas></div>
+  <!-- MAIN STORY -->
+  <main class="page">
+    <!-- Chapter 1: Decades overview -->
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 1 / Big picture</p>
+          <h2 class="chapter-title">Three decades of hit music in one view</h2>
+          <p class="chapter-body">
+            Before comparing one song to the present day, it helps to understand
+            how the sound of a typical hit has shifted over time. The chart on the
+            right compresses the 2000s, 2010s, and 2020s into three numbers:
+            average tempo for each decade.
+          </p>
+          <p class="chapter-body">
+            In the early two thousands, charting tracks leaned into higher energy
+            radio pop. The following decade saw a slight cooling as EDM peaks
+            mixed with slower hip hop and ballads. By the 2020s, hits settle into
+            a slightly slower and more controlled range that works well for
+            playlists and background listening.
+          </p>
+          <div class="chapter-note">
+            <p>
+              "Breathe" was written for that first decade climate. Its tempo sits
+              above the average even for the 2000s.
+            </p>
+          </div>
+        </div>
+        <div class="chapter-chart">
+          <div class="chart-card">
+            <p class="chart-label">Average tempo by decade</p>
+            <p class="chart-sub">
+              Each bar shows the mean beats per minute for songs in that decade in this dataset.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="decadeTempoChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="tempo" class="section">
-      <div class="section-number">02 — Energy</div>
-      <h2 class="section-title">The Heartbeat Evolution</h2>
-      <p class="section-description">Every era has its pulse. Watch BPM rise and fall through EDM explosions, trap slowdowns, and playlist optimization. Faith Hill's 136 BPM sits far above today's average—would that energy feel out of place or refreshingly dynamic?</p>
-      <div class="chart-card">
-        <div class="chart-label">Average BPM Over 24 Years</div>
-        <div class="chart-wrapper"><canvas id="tempoChart"></canvas></div>
-      </div>
-      <div class="insight">
-        <div class="insight-title">Key Insight</div>
-        <div class="insight-text">Faith Hill's "Breathe" clocks in at 136 BPM—significantly faster than today's average. In the slower, more deliberate streaming landscape, that tempo would feel rushed.</div>
-      </div>
-    </section>
-
-    <section id="loudness" class="section">
-      <div class="section-number">03 — Volume</div>
-      <h2 class="section-title">The Loudness Wars</h2>
-      <p class="section-description">Every year, mastering engineers pushed harder. Tracks got compressed, peaks got crushed, and "loud" became the price of admission. Faith Hill's -7.2 dB is gentle by today's standard. In a playlist, would she get drowned out?</p>
-      <div class="chart-card">
-        <div class="chart-label">Average Loudness (dB) 2000–2024</div>
-        <div class="chart-wrapper"><canvas id="loudnessChart"></canvas></div>
-      </div>
-      <div class="insight">
-        <div class="insight-title">The Compression Era</div>
-        <div class="insight-text">Modern hits are mastered significantly louder than "Breathe." In autoplay queues, quieter tracks feel less impactful—dynamics have been sacrificed for playlist presence.</div>
-      </div>
-    </section>
-
-    <section id="length" class="section">
-      <div class="section-number">04 — Duration</div>
-      <h2 class="section-title">Shrinking Songs</h2>
-      <p class="section-description">4:10 was perfect for early-2000s radio. But streaming rewards replay counts, and TikTok rewards hooks in 15 seconds. Watch as the average hit song shrinks over two decades. "Breathe" is now a marathon in a sprint era.</p>
-      <div class="chart-card">
-        <div class="chart-label">Average Song Duration (Minutes)</div>
-        <div class="chart-wrapper"><canvas id="durationChart"></canvas></div>
+    <!-- Chapter 2: Tempo -->
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 2 / Tempo</p>
+          <h2 class="chapter-title">The pulse of the charts slows down</h2>
+          <p class="chapter-body">
+            Tempo is one of the clearest differences between "Breathe" and many
+            present day hits. The line chart tracks the average beats per minute
+            for songs in this dataset from 2000 to 2024. The golden dot marks the
+            tempo of "Breathe" in that landscape.
+          </p>
+          <p class="chapter-body">
+            The trend is not a straight line downward. There are bumps around the
+            mid two thousands and early two thousand tens when dance pop and EDM
+            pulled averages higher. But the general direction is toward slightly
+            slower songs, which fit well into long playlists and looping streams.
+          </p>
+          <p class="chapter-body" id="fh-tempo-note">
+            Faster than most twenty twenties hits.
+          </p>
+        </div>
+        <div class="chapter-chart">
+          <div class="chart-card">
+            <p class="chart-label">Average tempo, 2000 to 2024</p>
+            <p class="chart-sub">
+              Line shows the mean tempo each year. Highlighted point shows where "Breathe" would sit.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="tempoChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="acoustic" class="section">
-      <div class="section-number">05 — Production</div>
-      <h2 class="section-title">From Strings to Synths</h2>
-      <p class="section-description">Faith Hill's piano, strings, and live drums were the norm in 2000. This chart tracks the decline of acoustic instrumentation. By 2024, the laptop has replaced the studio band.</p>
-      <div class="chart-card">
-        <div class="chart-label">Acousticness Over Time</div>
-        <div class="chart-wrapper"><canvas id="acousticChart"></canvas></div>
+    <!-- Chapter 3: Duration -->
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 3 / Length</p>
+          <h2 class="chapter-title">Hit songs keep getting shorter</h2>
+          <p class="chapter-body">
+            Early two thousands singles often ran longer than four minutes, a
+            format that worked for radio programming and slow build ballads.
+            Streaming platforms reward repeat plays instead. Shorter tracks can
+            deliver more streams in the same listening window.
+          </p>
+          <p class="chapter-body">
+            The chart shows the average track length in minutes. The marker for
+            "Breathe" shows that its four minute running time is now an outlier.
+          </p>
+          <p class="chapter-body" id="fh-length-note">
+            Long for today’s single driven landscape.
+          </p>
+        </div>
+        <div class="chapter-chart">
+          <div class="chart-card">
+            <p class="chart-label">Average song length, 2000 to 2024</p>
+            <p class="chart-sub">
+              The dot shows the duration of "Breathe" in minutes.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="durationChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="dance" class="section">
-      <div class="section-number">06 — Movement</div>
-      <h2 class="section-title">Energy vs Danceability</h2>
-      <p class="section-description">Not all energetic songs are danceable. Not all dance tracks are high-energy. This scatter plot reveals distinct decade clusters—2000s balanced in the middle, 2010s pushing extremes, 2020s moodier and more scattered.</p>
-      <div class="custom-legend">
-        <div class="legend-item"><div class="legend-dot" style="background: #FF1B8D;"></div><span class="legend-text">2000s</span></div>
-        <div class="legend-item"><div class="legend-dot" style="background: #00D9FF;"></div><span class="legend-text">2010s</span></div>
-        <div class="legend-item"><div class="legend-dot" style="background: #FFC857;"></div><span class="legend-text">2020s</span></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-label">Energy × Danceability by Decade</div>
-        <div class="chart-wrapper"><canvas id="scatterChart"></canvas></div>
-      </div>
-    </section>
-
-    <section id="mood" class="section">
-      <div class="section-number">07 — Emotion</div>
-      <h2 class="section-title">The Decline of Joy</h2>
-      <p class="section-description">Spotify's valence score measures musical positivity. The trend is stark: hits are getting sadder. From upbeat 2000s pop to emo-rap and heartbreak ballads, the average hit has lost happiness. Faith Hill's valence would be above average today.</p>
-      <div class="chart-card">
-        <div class="chart-label">Valence (Musical Positivity) Over Time</div>
-        <div class="chart-wrapper"><canvas id="valenceChart"></canvas></div>
-      </div>
-      <div class="insight">
-        <div class="insight-title">A Melancholy Era</div>
-        <div class="insight-text">Modern hits prioritize vulnerability over celebration. Faith Hill's optimistic tone would stand out—but potentially as dated, not refreshing.</div>
-      </div>
-    </section>
-
-    <section id="genre" class="section">
-      <div class="section-number">08 — Categories</div>
-      <h2 class="section-title">Genre Fingerprints</h2>
-      <p class="section-description">Every genre has a signature sound. Hip-hop dominates in danceability. Rock brings raw energy. Pop balances everything. Faith Hill's country-pop roots show in high valence—but modern charts are dominated by hip-hop's DNA.</p>
-      <div class="chart-card">
-        <div class="chart-label">Audio Features by Genre</div>
-        <div class="chart-wrapper"><canvas id="genreChart"></canvas></div>
+    <!-- Chapter 4: Loudness -->
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 4 / Loudness</p>
+          <h2 class="chapter-title">The long fight for loudness plateaus</h2>
+          <p class="chapter-body">
+            For years mastering engineers pushed tracks louder to stand out on
+            radio and CD. This practice, often called the loudness war, filled
+            waves with dense and compressed mixes. Streaming platforms later added
+            volume normalization, which levels playback, but the aesthetic of
+            high impact, high density sound remains.
+          </p>
+          <p class="chapter-body">
+            "Breathe" was not mastered as aggressively as many recent hits. In a
+            normalized streaming context it would still be audible, but its softer
+            profile might feel less immediate next to modern pop and hip hop.
+          </p>
+        </div>
+        <div class="chapter-chart">
+          <div class="chart-card">
+            <p class="chart-label">Average loudness in decibels</p>
+            <p class="chart-sub">
+              Lower values are quieter. The point shows the loudness of "Breathe".
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="loudnessChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="formula" class="section">
-      <div class="section-number">09 — Analysis</div>
-      <h2 class="section-title">What Makes a #1?</h2>
-      <p class="section-description">Do #1 songs sound different from the rest? This horizontal bar chart compares top hits against all charting songs. #1s are slightly more energetic and danceable, but surprisingly similar overall. There's no magic formula—but there are clear trends.</p>
-      <div class="chart-card">
-        <div class="chart-label">Top Hits vs All Charting Songs</div>
-        <div class="chart-wrapper"><canvas id="hitFormulaChart"></canvas></div>
+    <!-- Chapter 5: Energy and Danceability -->
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 5 / Energy and movement</p>
+          <h2 class="chapter-title">Intensity stays high while movement shifts</h2>
+          <p class="chapter-body">
+            Spotify's energy and danceability measures describe how intense a track
+            feels and how easy it is to move to it. This dual line chart follows
+            both values across time. The two golden points show where "Breathe"
+            lands on each scale.
+          </p>
+          <p class="chapter-body">
+            Energy levels have stayed fairly strong across the period, but
+            danceability rises in the 2010s as rhythmic hip hop and electronic
+            pop dominate the charts. "Breathe" has respectable energy yet more
+            modest danceability compared to many recent songs designed for clubs,
+            challenges, and short form video.
+          </p>
+        </div>
+        <div class="chapter-chart">
+          <div class="chart-card">
+            <p class="chart-label">Average energy and danceability</p>
+            <p class="chart-sub">
+              Lines show yearly averages. Markers show the position of "Breathe" on each scale.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="energyDanceChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="verdict" class="section">
-      <div class="section-number">10 — Conclusion</div>
-      <h2 class="section-title">The Verdict</h2>
-      <p class="section-description">Here's the final showdown: "Breathe" (2000) versus the average 2020s hit. Faith Hill is faster, quieter, less danceable, happier, but lower energy. She's out of sync on nearly every metric. The original wouldn't chart. But a 2024 remix—slowed down, compressed, with modern production? <strong style="color: var(--pink);">That's a different story.</strong></p>
-      <div class="chart-card">
-        <div class="chart-label">"Breathe" vs 2020s Average</div>
-        <div class="chart-wrapper"><canvas id="faithHillChart"></canvas></div>
+    <!-- Chapter 6: Mood -->
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 6 / Mood drift</p>
+          <h2 class="chapter-title">Popular music grows less bright on average</h2>
+          <p class="chapter-body">
+            Several studies argue that popular music sounds less positive today
+            than it did at the start of the century. Spotify's valence feature
+            offers a way to see that shift numerically. Higher values indicate
+            brighter, more cheerful sounding songs.
+          </p>
+          <p class="chapter-body">
+            The line on the right leans downward through the late two thousands
+            and early two thousand tens, when emo influenced hip hop, darker
+            electronic textures, and introspective pop move to the center of the
+            charts. "Breathe" sits on the upper side of that scale, which would
+            make it stand out as unusually optimistic in many modern playlists.
+          </p>
+        </div>
+        <div class="chapter-chart">
+          <div class="chart-card">
+            <p class="chart-label">Average musical brightness, 2000 to 2024</p>
+            <p class="chart-sub">
+              The highlight marks the valence of "Breathe" against the broader trend.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="valenceChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="insight">
-        <div class="insight-title">Final Takeaway</div>
-        <div class="insight-text">Faith Hill's "Breathe" was perfectly engineered for 2000—but 2024 demands different physics. The song would need a complete sonic overhaul: reduce tempo, boost loudness, add trap production, and trim duration. Then maybe she'd breathe new life into the charts.</div>
+    </section>
+
+    <!-- Chapter 7: Genre fingerprints -->
+    <section class="chapter">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 7 / Genres</p>
+          <h2 class="chapter-title">Every style carries its own audio fingerprint</h2>
+          <p class="chapter-body">
+            Grouping the dataset into broad genres reveals familiar patterns.
+            Hip hop leans high in danceability. Rock carries stronger average
+            energy. Country and pop sit nearer the center, often with brighter
+            moods and more acoustic instruments.
+          </p>
+          <p class="chapter-body">
+            Faith Hill's song blends country and pop traits. It fits the energy
+            and valence profile of country hits from the early 2000s, but the
+            overall charts have shifted toward hip hop and hybrid pop that sound
+            quite different from this palette.
+          </p>
+        </div>
+        <div class="chapter-chart">
+          <div class="chart-card">
+            <p class="chart-label">Average audio features by genre</p>
+            <p class="chart-sub">
+              Bars compare energy, danceability, and valence for broad genre groups.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="genreChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapter 8: Side by side verdict -->
+    <section class="chapter chapter-final">
+      <div class="chapter-grid">
+        <div class="chapter-text">
+          <p class="chapter-kicker">Chapter 8 / Verdict</p>
+          <h2 class="chapter-title">Would "Breathe" still be a hit?</h2>
+          <p class="chapter-body">
+            The final two charts bring everything together. The first compares the
+            musical structure of "Breathe" against the typical 2020s hit. The
+            second compares their emotional profile: energy, danceability, mood,
+            and acousticness.
+          </p>
+          <p class="chapter-body">
+            On nearly every dimension, "Breathe" sits to the side of the cluster.
+            It is faster, longer, quieter, and more acoustic. It is also brighter
+            and slightly less dance focused than many current number ones. That
+            does not mean the song is weak. It means that the market around it has
+            moved.
+          </p>
+          <div class="chapter-note">
+            <p>
+              The original version would likely feel nostalgic rather than
+              contemporary if it appeared on the charts today. A remix that trims
+              the length, boosts loudness, and leans into modern drum and bass
+              choices might have a better shot at repeating its earlier success.
+            </p>
+          </div>
+        </div>
+        <div class="chapter-chart final-charts">
+          <div class="chart-card final-chart-card">
+            <p class="chart-label">Musical structure comparison</p>
+            <p class="chart-sub">
+              Tempo, length, and loudness, normalized for comparison.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="musicalStructureChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card final-chart-card">
+            <p class="chart-label">Emotional and production profile</p>
+            <p class="chart-sub">
+              Energy, danceability, valence, and acousticness for "Breathe" and a typical 2020s hit.
+            </p>
+            <div class="chart-wrapper">
+              <canvas id="emotionalProfileChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
-    <p class="footer-text">Data Visualization Final — Parsons School of Design — Fall 2024</p>
+    <p class="footer-text">
+      Data Visualization Final · Parsons School of Design · Fall 2024
+    </p>
   </footer>
 
-  <script>
-    Chart.defaults.font.family = '-apple-system, sans-serif';
-    Chart.defaults.color = '#d4d4d8';
-    const g = { color: 'rgba(255,255,255,0.08)', drawBorder: false };
-    const t = { color: '#a1a1aa', font: { size: 11, weight: '600' } };
-
-    // Read and parse CSV
-    async function loadCSVData() {
-      try {
-        // Try to read the CSV file
-        let csvText;
-        try {
-          csvText = await window.fs.readFile('billboard_24years_lyrics_spotify.csv', { encoding: 'utf8' });
-        } catch (e) {
-          console.error('First attempt failed:', e);
-          // If that fails, the file might not be uploaded - use sample data
-          throw new Error('CSV file not found');
-        }
-        
-        Papa.parse(csvText, {
-          header: true,
-          dynamicTyping: true,
-          skipEmptyLines: true,
-          complete: function(results) {
-            const data = results.data;
-            
-            // Clean column names
-            data.forEach(row => {
-              Object.keys(row).forEach(key => {
-                const cleanKey = key.trim().toLowerCase();
-                if (cleanKey !== key) {
-                  row[cleanKey] = row[key];
-                  delete row[key];
-                }
-              });
-            });
-
-            // Filter valid data
-            const validData = data.filter(d => 
-              d.year && d.tempo && d.energy && d.danceability && 
-              d.valence && d.loudness && d.duration_ms && d.acousticness
-            );
-
-            // Group by year
-            const yearData = [];
-            const years = [...new Set(validData.map(d => d.year))].sort();
-            years.forEach(year => {
-              const yearSongs = validData.filter(d => d.year === year);
-              if (yearSongs.length > 0) {
-                yearData.push({
-                  year: year,
-                  tempo: yearSongs.reduce((sum, d) => sum + d.tempo, 0) / yearSongs.length,
-                  loudness: yearSongs.reduce((sum, d) => sum + d.loudness, 0) / yearSongs.length,
-                  valence: yearSongs.reduce((sum, d) => sum + d.valence, 0) / yearSongs.length,
-                  energy: yearSongs.reduce((sum, d) => sum + d.energy, 0) / yearSongs.length,
-                  danceability: yearSongs.reduce((sum, d) => sum + d.danceability, 0) / yearSongs.length,
-                  duration_ms: yearSongs.reduce((sum, d) => sum + d.duration_ms, 0) / yearSongs.length,
-                  acousticness: yearSongs.reduce((sum, d) => sum + d.acousticness, 0) / yearSongs.length
-                });
-              }
-            });
-
-            // Group by decade
-            const decadeData = [];
-            const decades = [
-              { name: '2000s', start: 2000, end: 2009 },
-              { name: '2010s', start: 2010, end: 2019 },
-              { name: '2020s', start: 2020, end: 2024 }
-            ];
-            
-            decades.forEach(dec => {
-              const decadeSongs = validData.filter(d => d.year >= dec.start && d.year <= dec.end);
-              if (decadeSongs.length > 0) {
-                decadeData.push({
-                  decade: dec.name,
-                  tempo: decadeSongs.reduce((sum, d) => sum + d.tempo, 0) / decadeSongs.length,
-                  loudness: decadeSongs.reduce((sum, d) => sum + d.loudness, 0) / decadeSongs.length,
-                  valence: decadeSongs.reduce((sum, d) => sum + d.valence, 0) / decadeSongs.length,
-                  energy: decadeSongs.reduce((sum, d) => sum + d.energy, 0) / decadeSongs.length,
-                  danceability: decadeSongs.reduce((sum, d) => sum + d.danceability, 0) / decadeSongs.length
-                });
-              }
-            });
-
-            // Guess genres
-            function guessGenre(artist) {
-              artist = String(artist || '').toLowerCase();
-              if (/drake|eminem|kanye|jay|nicki|kendrick|snoop|dre|tupac|biggie|lil|future|migos|travis|post malone/.test(artist)) return 'Hip-Hop';
-              if (/coldplay|linkin|green day|u2|paramore|foo fighters|red hot|nirvana|radiohead|metallica/.test(artist)) return 'Rock';
-              return 'Pop';
-            }
-
-            const genreData = [];
-            const genres = ['Pop', 'Hip-Hop', 'Rock'];
-            genres.forEach(genre => {
-              const genreSongs = validData.filter(d => guessGenre(d.band_singer) === genre);
-              if (genreSongs.length > 0) {
-                genreData.push({
-                  genre: genre,
-                  energy: genreSongs.reduce((sum, d) => sum + d.energy, 0) / genreSongs.length,
-                  danceability: genreSongs.reduce((sum, d) => sum + d.danceability, 0) / genreSongs.length,
-                  valence: genreSongs.reduce((sum, d) => sum + d.valence, 0) / genreSongs.length
-                });
-              }
-            });
-
-            // Get #1 hits
-            const hitsData = validData.filter(d => d.ranking === 1);
-
-            // Draw all charts
-            drawDecadeChart(decadeData);
-            drawTempoChart(yearData);
-            drawLoudnessChart(yearData);
-            drawDurationChart(yearData);
-            drawAcousticChart(yearData);
-            drawScatterChart(validData);
-            drawValenceChart(yearData);
-            drawGenreChart(genreData);
-            drawHitFormulaChart(hitsData, validData);
-            drawFaithHillChart(yearData);
-          },
-          error: function(error) {
-            console.error('Error parsing CSV:', error);
-            console.log('CSV parse error details:', error);
-            loadSampleData();
-          }
-        });
-      } catch (error) {
-        console.error('Error reading CSV:', error);
-        console.log('Falling back to sample data');
-        loadSampleData();
-      }
-    }
-
-    function loadSampleData() {
-      const yearData = [
-        {year:2000,tempo:119.2,loudness:-7.1,valence:0.53,energy:0.61,danceability:0.62,duration_ms:238000,acousticness:0.42},
-        {year:2005,tempo:123.2,loudness:-6.2,valence:0.48,energy:0.65,danceability:0.66,duration_ms:228000,acousticness:0.37},
-        {year:2010,tempo:123.5,loudness:-5.2,valence:0.46,energy:0.70,danceability:0.71,duration_ms:218000,acousticness:0.29},
-        {year:2015,tempo:118.5,loudness:-4.2,valence:0.45,energy:0.67,danceability:0.70,duration_ms:208000,acousticness:0.22},
-        {year:2020,tempo:113.9,loudness:-3.6,valence:0.42,energy:0.66,danceability:0.71,duration_ms:198000,acousticness:0.16},
-        {year:2024,tempo:115.8,loudness:-3.2,valence:0.44,energy:0.68,danceability:0.71,duration_ms:190000,acousticness:0.12}
-      ];
-
-      const decadeData = [
-        {decade:"2000s",tempo:122.4,valence:0.50,loudness:-6.3,energy:0.64,danceability:0.65},
-        {decade:"2010s",tempo:119.2,valence:0.45,loudness:-4.5,energy:0.68,danceability:0.71},
-        {decade:"2020s",tempo:115.1,valence:0.42,loudness:-3.4,energy:0.67,danceability:0.71}
-      ];
-
-      const genreData = [
-        {genre:"Pop",energy:0.65,danceability:0.68,valence:0.52},
-        {genre:"Hip-Hop",energy:0.72,danceability:0.82,valence:0.48},
-        {genre:"Rock",energy:0.78,danceability:0.52,valence:0.45}
-      ];
-
-      const fullData = yearData.flatMap(y => 
-        Array.from({length: 50}, () => ({
-          ...y,
-          energy: Math.max(0, Math.min(1, y.energy + (Math.random() - 0.5) * 0.3)),
-          danceability: Math.max(0, Math.min(1, y.danceability + (Math.random() - 0.5) * 0.3))
-        }))
-      );
-
-      drawDecadeChart(decadeData);
-      drawTempoChart(yearData);
-      drawLoudnessChart(yearData);
-      drawDurationChart(yearData);
-      drawAcousticChart(yearData);
-      drawScatterChart(fullData);
-      drawValenceChart(yearData);
-      drawGenreChart(genreData);
-      drawHitFormulaChart(yearData, fullData);
-      drawFaithHillChart(yearData);
-    }
-
-    function drawDecadeChart(data) {
-      new Chart(document.getElementById('decadeChart'), {
-        type: 'bar',
-        data: {
-          labels: ['Tempo (BPM)', 'Valence', 'Loudness (dB)'],
-          datasets: data.map((d, i) => ({
-            label: d.decade,
-            data: [d.tempo, d.valence, Math.abs(d.loudness)],
-            backgroundColor: ['rgba(255,27,141,0.8)', 'rgba(0,217,255,0.8)', 'rgba(255,200,87,0.8)'][i],
-            borderRadius: 12
-          }))
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: true, position: 'top', labels: { color: '#fafafa', font: { size: 14, weight: '700' }, padding: 24, usePointStyle: true } } },
-          scales: { x: { grid: g, ticks: t }, y: { beginAtZero: false, grid: g, ticks: t } }
-        }
-      });
-    }
-
-    function drawTempoChart(data) {
-      new Chart(document.getElementById('tempoChart'), {
-        type: 'line',
-        data: {
-          labels: data.map(d => d.year),
-          datasets: [{
-            label: 'BPM',
-            data: data.map(d => d.tempo),
-            borderColor: '#FF1B8D',
-            backgroundColor: 'rgba(255,27,141,0.15)',
-            borderWidth: 4,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 8,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { intersect: false, mode: 'index' },
-          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0a0014', borderColor: '#FF1B8D', borderWidth: 2 } },
-          scales: { x: { grid: g, ticks: t }, y: { grid: g, ticks: t } }
-        }
-      });
-    }
-
-    function drawLoudnessChart(data) {
-      new Chart(document.getElementById('loudnessChart'), {
-        type: 'line',
-        data: {
-          labels: data.map(d => d.year),
-          datasets: [{
-            label: 'Loudness (dB)',
-            data: data.map(d => d.loudness),
-            borderColor: '#FF6B35',
-            backgroundColor: 'rgba(255,107,53,0.15)',
-            borderWidth: 4,
-            tension: 0.35,
-            pointRadius: 0,
-            pointHoverRadius: 8,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { intersect: false, mode: 'index' },
-          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0a0014', borderColor: '#FF6B35', borderWidth: 2 } },
-          scales: { x: { grid: g, ticks: t }, y: { grid: g, ticks: t } }
-        }
-      });
-    }
-
-    function drawDurationChart(data) {
-      new Chart(document.getElementById('durationChart'), {
-        type: 'line',
-        data: {
-          labels: data.map(d => d.year),
-          datasets: [{
-            label: 'Duration (min)',
-            data: data.map(d => d.duration_ms / 60000),
-            borderColor: '#9D4EDD',
-            backgroundColor: 'rgba(157,78,221,0.15)',
-            borderWidth: 4,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 8,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { intersect: false, mode: 'index' },
-          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0a0014', borderColor: '#9D4EDD', borderWidth: 2 } },
-          scales: { x: { grid: g, ticks: t }, y: { grid: g, ticks: t } }
-        }
-      });
-    }
-
-    function drawAcousticChart(data) {
-      new Chart(document.getElementById('acousticChart'), {
-        type: 'line',
-        data: {
-          labels: data.map(d => d.year),
-          datasets: [{
-            label: 'Acousticness',
-            data: data.map(d => d.acousticness),
-            borderColor: '#06FFA5',
-            backgroundColor: 'rgba(6,255,165,0.12)',
-            borderWidth: 4,
-            tension: 0.4,
-            pointRadius: 0,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { intersect: false, mode: 'index' },
-          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0a0014', borderColor: '#06FFA5', borderWidth: 2 } },
-          scales: { x: { grid: g, ticks: t }, y: { min: 0, max: 1, grid: g, ticks: t } }
-        }
-      });
-    }
-
-    function drawScatterChart(data) {
-      const by2000s = data.filter(d => d.year >= 2000 && d.year <= 2009);
-      const by2010s = data.filter(d => d.year >= 2010 && d.year <= 2019);
-      const by2020s = data.filter(d => d.year >= 2020);
-
-      new Chart(document.getElementById('scatterChart'), {
-        type: 'scatter',
-        data: {
-          datasets: [
-            { label: '2000s', data: by2000s.map(d => ({ x: d.energy, y: d.danceability })), backgroundColor: 'rgba(255,27,141,0.6)', pointRadius: 5 },
-            { label: '2010s', data: by2010s.map(d => ({ x: d.energy, y: d.danceability })), backgroundColor: 'rgba(0,217,255,0.6)', pointRadius: 5 },
-            { label: '2020s', data: by2020s.map(d => ({ x: d.energy, y: d.danceability })), backgroundColor: 'rgba(255,200,87,0.6)', pointRadius: 5 }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { title: { display: true, text: 'Energy', color: '#fafafa', font: { size: 14, weight: '700' } }, min: 0, max: 1, grid: g, ticks: t },
-            y: { title: { display: true, text: 'Danceability', color: '#fafafa', font: { size: 14, weight: '700' } }, min: 0, max: 1, grid: g, ticks: t }
-          }
-        }
-      });
-    }
-
-    function drawValenceChart(data) {
-      new Chart(document.getElementById('valenceChart'), {
-        type: 'line',
-        data: {
-          labels: data.map(d => d.year),
-          datasets: [{
-            label: 'Valence',
-            data: data.map(d => d.valence),
-            borderColor: '#FFC857',
-            backgroundColor: 'rgba(255,200,87,0.15)',
-            borderWidth: 4,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 8,
-            fill: true
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { intersect: false, mode: 'index' },
-          plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0a0014', borderColor: '#FFC857', borderWidth: 2 } },
-          scales: { x: { grid: g, ticks: t }, y: { min: 0, max: 1, grid: g, ticks: t } }
-        }
-      });
-    }
-
-    function drawGenreChart(data) {
-      new Chart(document.getElementById('genreChart'), {
-        type: 'bar',
-        data: {
-          labels: data.map(d => d.genre),
-          datasets: [
-            { label: 'Energy', data: data.map(d => d.energy), backgroundColor: 'rgba(255,27,141,0.8)', borderRadius: 10 },
-            { label: 'Danceability', data: data.map(d => d.danceability), backgroundColor: 'rgba(0,217,255,0.8)', borderRadius: 10 },
-            { label: 'Valence', data: data.map(d => d.valence), backgroundColor: 'rgba(255,200,87,0.8)', borderRadius: 10 }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: true, position: 'top', labels: { color: '#fafafa', font: { size: 14, weight: '700' }, padding: 24, usePointStyle: true } } },
-          scales: { x: { grid: g, ticks: t }, y: { max: 1, grid: g, ticks: t } }
-        }
-      });
-    }
-
-    function drawHitFormulaChart(hits, all) {
-      const hitsAvg = {
-        tempo: hits.reduce((s, d) => s + d.tempo, 0) / hits.length,
-        energy: hits.reduce((s, d) => s + d.energy, 0) / hits.length,
-        danceability: hits.reduce((s, d) => s + d.danceability, 0) / hits.length,
-        valence: hits.reduce((s, d) => s + d.valence, 0) / hits.length,
-        loudness: Math.abs(hits.reduce((s, d) => s + d.loudness, 0) / hits.length)
-      };
-
-      const allAvg = {
-        tempo: all.reduce((s, d) => s + d.tempo, 0) / all.length,
-        energy: all.reduce((s, d) => s + d.energy, 0) / all.length,
-        danceability: all.reduce((s, d) => s + d.danceability, 0) / all.length,
-        valence: all.reduce((s, d) => s + d.valence, 0) / all.length,
-        loudness: Math.abs(all.reduce((s, d) => s + d.loudness, 0) / all.length)
-      };
-
-      new Chart(document.getElementById('hitFormulaChart'), {
-        type: 'bar',
-        data: {
-          labels: ['Tempo', 'Energy', 'Danceability', 'Valence', 'Loudness'],
-          datasets: [
-            { label: '#1 Songs', data: [hitsAvg.tempo, hitsAvg.energy, hitsAvg.danceability, hitsAvg.valence, hitsAvg.loudness], backgroundColor: 'rgba(255,27,141,0.85)', borderRadius: 10 },
-            { label: 'All Hits', data: [allAvg.tempo, allAvg.energy, allAvg.danceability, allAvg.valence, allAvg.loudness], backgroundColor: 'rgba(100,116,139,0.6)', borderRadius: 10 }
-          ]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: true, position: 'top', labels: { color: '#fafafa', font: { size: 14, weight: '700' }, padding: 24, usePointStyle: true } } },
-          scales: { x: { grid: g, ticks: t }, y: { grid: g, ticks: {...t, font: { size: 12, weight: '700' } } } }
-        }
-      });
-    }
-
-    function drawFaithHillChart(yearData) {
-      const avg2020s = yearData.filter(d => d.year >= 2020);
-      const avg = {
-        tempo: avg2020s.reduce((s, d) => s + d.tempo, 0) / avg2020s.length,
-        energy: avg2020s.reduce((s, d) => s + d.energy, 0) / avg2020s.length,
-        danceability: avg2020s.reduce((s, d) => s + d.danceability, 0) / avg2020s.length,
-        valence: avg2020s.reduce((s, d) => s + d.valence, 0) / avg2020s.length,
-        loudness: Math.abs(avg2020s.reduce((s, d) => s + d.loudness, 0) / avg2020s.length)
-      };
-
-      new Chart(document.getElementById('faithHillChart'), {
-        type: 'bar',
-        data: {
-          labels: ['Tempo', 'Energy', 'Danceability', 'Valence', 'Loudness'],
-          datasets: [
-            { label: '"Breathe" (2000)', data: [136, 0.42, 0.51, 0.55, 7.2], backgroundColor: 'rgba(255,27,141,0.85)', borderRadius: 12 },
-            { label: '2020s Average', data: [avg.tempo, avg.energy, avg.danceability, avg.valence, avg.loudness], backgroundColor: 'rgba(0,217,255,0.85)', borderRadius: 12 }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: true, position: 'top', labels: { color: '#fafafa', font: { size: 14, weight: '700' }, padding: 24, usePointStyle: true } } },
-          scales: { x: { grid: g, ticks: t }, y: { grid: g, ticks: t } }
-        }
-      });
-    }
-
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
-
-    loadCSVData();
-  </script>
+  <script src="main.js"></script>
 </body>
 </html>
