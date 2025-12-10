@@ -4,41 +4,21 @@ Chart.defaults.plugins.annotation = {
   drawTime: "afterDatasetsDraw",
 };
 
-function breatheDot(x, y) {
-  return {
-    type: "point",
-    xValue: x,
-    yValue: y,
-    radius: 6,
-    backgroundColor: "#ffc857",
-    borderColor: "#ffffff",
-    borderWidth: 2,
-    z: 999, // force above chart elements
-    label: {
-      display: true,
-      content: "Breathe",
-      color: "#ffc857",
-      backgroundColor: "rgba(0,0,0,0.6)",
-      borderRadius: 6,
-      padding: 6,
-      position: "top",
-      yAdjust: -12,
-    }
-  };
-}
-
 // Register annotation plugin if available
-if (window['chartjs-plugin-annotation']) {
-  Chart.register(window['chartjs-plugin-annotation']);
+if (typeof ChartAnnotation !== 'undefined') {
+  Chart.register(ChartAnnotation);
+  console.log('✓ Annotation plugin registered as ChartAnnotation');
+} else if (window.chartjs && window.chartjs.annotation) {
+  Chart.register(window.chartjs.annotation);
+  console.log('✓ Annotation plugin registered via window.chartjs');
+} else if (Chart.registry && Chart.registry.plugins.get('annotation')) {
+  console.log('✓ Annotation plugin already registered');
 } else {
-  console.warn(
-    'chartjs-plugin-annotation not found. Breathe highlight points will not render until the plugin is loaded.'
-  );
+  console.error('❌ chartjs-plugin-annotation not found. Trying to continue anyway...');
 }
 
 // Global chart defaults
-Chart.defaults.font.family =
-  '-apple-system, system-ui, BlinkMacSystemFont, "Inter", sans-serif';
+Chart.defaults.font.family = '-apple-system, system-ui, BlinkMacSystemFont, "Inter", sans-serif';
 Chart.defaults.color = '#a2a2b8';
 
 const gridStyle = {
@@ -104,84 +84,58 @@ function normaliseKeys(row) {
 }
 
 /**
- * Build a dynamic annotation point for "Breathe" on a timeline chart.
- * labels: x axis labels (years)
- * faith: detected Faith Hill data (with .year)
- * key: which feature to use for y value
+ * Build a refined annotation point for "Breathe" on timeline charts.
+ * Pentagram-level design approach: minimal, purposeful, sophisticated.
  */
 function buildBreathePoint(labels, faith, key, options = {}) {
   if (!faith || faith.year == null) return null;
-  if (!Array.isArray(labels) || !labels.includes(faith.year)) {
-    console.warn(
-      '[Annotation] Skipping Breathe point for',
-      key,
-      'because year',
-      faith.year,
-      'is not present in chart labels:',
-      labels
-    );
+  
+  // Find the FIRST occurrence of the year to avoid duplicates
+  const yearIndex = labels.findIndex(y => y === faith.year);
+  if (yearIndex === -1) {
+    console.warn("[Annotation] Year not found in labels:", faith.year);
     return null;
   }
 
-  let yValue = null;
-  switch (key) {
-    case 'tempo':
-      yValue = faith.tempo;
-      break;
-    case 'loudness':
-      yValue = faith.loudness;
-      break;
-    case 'duration':
-      yValue = faith.duration_ms / 60000;
-      break;
-    case 'valence':
-      yValue = faith.valence;
-      break;
-    case 'energy':
-      yValue = faith.energy;
-      break;
-    case 'danceability':
-      yValue = faith.danceability;
-      break;
-    default:
-      return null;
-  }
+  let yValue = {
+    tempo: faith.tempo,
+    loudness: faith.loudness,
+    duration: faith.duration_ms / 60000,
+    valence: faith.valence,
+    energy: faith.energy,
+    danceability: faith.danceability
+  }[key];
 
   if (yValue == null || Number.isNaN(yValue)) return null;
 
-  const color = options.color || 'rgba(255,227,140,0.95)';
-  const label = options.label || '"Breathe" (2000)';
-  const id = options.id || 'breathePoint';
-
+  // Design-refined styling - use index to ensure correct position
   return {
-    id,
+    id: options.id || 'breathePoint',
     type: 'point',
-    xValue: faith.year,
-    yValue,
-    radius: options.radius || 6,
-    backgroundColor: color,
-    borderColor: '#151521',
-    borderWidth: 2,
-    hitRadius: 12,
-    // subtle glow
-    shadowBlur: 12,
-    shadowColor: 'rgba(255,227,140,0.55)',
-    label:
-      options.showLabel === false
-        ? { display: false }
-        : {
-            display: true,
-            content: label,
-            position: 'top',
-            yAdjust: -14,
-            backgroundColor: 'rgba(10, 10, 18, 0.92)',
-            color: '#fefce8',
-            padding: 6,
-            borderRadius: 4,
-            borderWidth: 1,
-            borderColor: 'rgba(255, 239, 150, 0.7)',
-            font: { size: 11, weight: '500' }
-          }
+    xValue: yearIndex,
+    yValue: yValue,
+    radius: 8,
+    backgroundColor: '#ffc857',
+    borderColor: '#ffffff',
+    borderWidth: 2.5,
+    z: 999,
+    drawTime: 'afterDatasetsDraw',
+    label: {
+      display: true,
+      content: '"Breathe"',
+      position: 'top',
+      yAdjust: -18,
+      xAdjust: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.92)',
+      color: '#ffc857',
+      padding: { top: 8, bottom: 8, left: 14, right: 14 },
+      borderRadius: 8,
+      font: { 
+        size: 12, 
+        weight: '600',
+        family: '-apple-system, system-ui, BlinkMacSystemFont, "Inter", sans-serif'
+      }
+    }
   };
 }
 
@@ -625,7 +579,7 @@ function updateFaithText(faith, avg2020s) {
 
   if (lengthNoteEl && avg2020s) {
     if (faith.duration_ms > avg2020s.duration_ms + 30000) {
-      lengthNoteEl.textContent = 'Long for today’s single driven landscape.';
+      lengthNoteEl.textContent = 'Long for today\'s single-driven landscape.';
     } else if (faith.duration_ms < avg2020s.duration_ms - 30000) {
       lengthNoteEl.textContent = 'Shorter than a typical modern hit.';
     } else {
@@ -714,9 +668,7 @@ function drawTempoChart(yearly, faith) {
 
   const annotations = {};
   const breathe = buildBreathePoint(labels, faith, 'tempo', {
-    color: palette.primaryLine,
-    id: 'breatheTempo',
-    label: '"Breathe" tempo'
+    id: 'breatheTempo'
   });
   if (breathe) annotations.breatheTempo = breathe;
 
@@ -776,9 +728,7 @@ function drawLoudnessChart(yearly, faith) {
 
   const annotations = {};
   const breathe = buildBreathePoint(labels, faith, 'loudness', {
-    color: palette.tertiaryLine,
-    id: 'breatheLoud',
-    label: '"Breathe" loudness'
+    id: 'breatheLoud'
   });
   if (breathe) annotations.breatheLoud = breathe;
 
@@ -838,9 +788,7 @@ function drawDurationChart(yearly, faith) {
 
   const annotations = {};
   const breathe = buildBreathePoint(labels, faith, 'duration', {
-    color: palette.secondaryLine,
-    id: 'breatheDuration',
-    label: '"Breathe" length'
+    id: 'breatheDuration'
   });
   if (breathe) annotations.breatheDuration = breathe;
 
@@ -901,14 +849,10 @@ function drawEnergyDanceChart(yearly, faith) {
 
   const annotations = {};
   const breatheEnergy = buildBreathePoint(labels, faith, 'energy', {
-    color: palette.primaryLine,
-    id: 'breatheEnergy',
-    label: 'Energy of "Breathe"'
+    id: 'breatheEnergy'
   });
   const breatheDance = buildBreathePoint(labels, faith, 'danceability', {
-    color: palette.secondaryLine,
-    id: 'breatheDance',
-    label: 'Danceability of "Breathe"'
+    id: 'breatheDance'
   });
 
   if (breatheEnergy) annotations.breatheEnergy = breatheEnergy;
@@ -985,9 +929,7 @@ function drawValenceChart(yearly, faith) {
 
   const annotations = {};
   const breathe = buildBreathePoint(labels, faith, 'valence', {
-    color: palette.tertiaryLine,
-    id: 'breatheValence',
-    label: '"Breathe" brightness'
+    id: 'breatheValence'
   });
   if (breathe) annotations.breatheValence = breathe;
 
