@@ -11,32 +11,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Chart libraries -->
-<!-- Chart libraries -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <!-- HERO -->
   <header class="hero">
     <div class="hero-inner">
       <p class="hero-kicker">Parsons School of Design · Fall 2024</p>
+
       <h1 class="hero-title">
         Would Faith Hill<br />
         <span class="hero-highlight">Still Be a Hit?</span>
       </h1>
+
       <p class="hero-lede">
-        In 2000, Faith Hill's <span class="hero-song">"Breathe"</span> finished the year as the top song on the
-        Billboard Hot 100. Since then, streaming platforms, playlists, and TikTok
-        have pulled the sound of a hit in new directions. This project looks at
-        twenty four years of Billboard entries paired with Spotify audio features
-        to ask a simple question: if "Breathe" came out today, would it still climb to number one?
+        In 2000, Faith Hill’s <span class="hero-song">"Breathe"</span> finished as the top song of the year. 
+        Two decades later, the landscape of popular music looks different. Streaming platforms, algorithmic playlists, 
+        and TikTok trends have reshaped what rises to the top. Using Billboard year-end charts paired with Spotify audio features, 
+        this project asks a simple question with a complicated answer: if “Breathe” were released today, would it still become a hit?
       </p>
 
       <p class="hero-credit">
-        By Dev Srivastava · Data from Billboard year end charts and Spotify audio features
+        By Dev Srivastava · Data from Billboard year-end charts & Spotify audio features
       </p>
 
       <div class="hero-meta-row">
@@ -46,9 +47,10 @@
             <canvas id="miniTempoSparkline"></canvas>
           </div>
           <p class="meta-caption">
-            Average tempo for hit songs from 2000 onward.
+            How tempo has shifted since 2000.
           </p>
         </div>
+
         <div class="hero-meta-card">
           <p class="meta-label">"Breathe" quick profile</p>
           <ul class="meta-list">
@@ -63,38 +65,37 @@
 
   <!-- MAIN STORY -->
   <main class="page">
-    <!-- Chapter 1: Decades overview -->
+
+    <!-- Chapter 1 -->
     <section class="chapter">
       <div class="chapter-grid">
         <div class="chapter-text">
           <p class="chapter-kicker">Chapter 1 / Big picture</p>
-          <h2 class="chapter-title">Three decades of hit music in one view</h2>
+          <h2 class="chapter-title">Three decades of hit music at a glance</h2>
+
           <p class="chapter-body">
-            Before comparing one song to the present day, it helps to understand
-            how the sound of a typical hit has shifted over time. The chart on the
-            right compresses the 2000s, 2010s, and 2020s into three numbers:
-            average tempo for each decade.
+            Before comparing one song to the present, it helps to understand the broader arc. 
+            The chart on the right reduces almost three decades of music into a simple view: 
+            average tempo across the 2000s, 2010s, and 2020s.
           </p>
+
           <p class="chapter-body">
-            In the early two thousands, charting tracks leaned into higher energy
-            radio pop. The following decade saw a slight cooling as EDM peaks
-            mixed with slower hip hop and ballads. By the 2020s, hits settle into
-            a slightly slower and more controlled range that works well for
-            playlists and background listening.
+            Early 2000s hits leaned into energetic radio pop. The 2010s introduced a mix of EDM surges 
+            and slower hip hop trends. By the 2020s, the sound settles into something steadier and often more restrained, 
+            shaped by playlists and passive listening environments.
           </p>
+
           <div class="chapter-note">
             <p>
-              "Breathe" was written for that first decade climate. Its tempo sits
-              above the average even for the 2000s.
+              “Breathe” was written for the energy of the early 2000s. Even within its own decade, it runs fast.
             </p>
           </div>
         </div>
+
         <div class="chapter-chart">
           <div class="chart-card">
             <p class="chart-label">Average tempo by decade</p>
-            <p class="chart-sub">
-              Each bar shows the mean beats per minute for songs in that decade in this dataset.
-            </p>
+            <p class="chart-sub">Mean BPM for tracks in each decade.</p>
             <div class="chart-wrapper">
               <canvas id="decadeTempoChart"></canvas>
             </div>
@@ -103,34 +104,34 @@
       </div>
     </section>
 
-    <!-- Chapter 2: Tempo -->
+    <!-- Chapter 2 -->
     <section class="chapter">
       <div class="chapter-grid">
         <div class="chapter-text">
           <p class="chapter-kicker">Chapter 2 / Tempo</p>
-          <h2 class="chapter-title">The pulse of the charts slows down</h2>
+          <h2 class="chapter-title">Popular music slows its pace</h2>
+
           <p class="chapter-body">
-            Tempo is one of the clearest differences between "Breathe" and many
-            present day hits. The line chart tracks the average beats per minute
-            for songs in this dataset from 2000 to 2024. The golden dot marks the
-            tempo of "Breathe" in that landscape.
+            Tempo is one of the clearest differences between “Breathe” and many modern hits. 
+            The chart follows average BPM from 2000 to 2024. The highlighted point marks where 
+            “Breathe” would sit today.
           </p>
+
           <p class="chapter-body">
-            The trend is not a straight line downward. There are bumps around the
-            mid two thousands and early two thousand tens when dance pop and EDM
-            pulled averages higher. But the general direction is toward slightly
-            slower songs, which fit well into long playlists and looping streams.
+            The line doesn’t fall smoothly. It bumps during EDM spikes in the mid-2000s and early 2010s, 
+            but the long-term trend points toward slightly slower, more groove-driven songs designed 
+            for continuous streaming rather than radio rotation.
           </p>
+
           <p class="chapter-body" id="fh-tempo-note">
-            Faster than most twenty twenties hits.
+            Faster than most twenty-twenties hits.
           </p>
         </div>
+
         <div class="chapter-chart">
           <div class="chart-card">
-            <p class="chart-label">Average tempo, 2000 to 2024</p>
-            <p class="chart-sub">
-              Line shows the mean tempo each year. Highlighted point shows where "Breathe" would sit.
-            </p>
+            <p class="chart-label">Average tempo, 2000–2024</p>
+            <p class="chart-sub">Yearly average BPM with “Breathe” highlighted.</p>
             <div class="chart-wrapper">
               <canvas id="tempoChart"></canvas>
             </div>
@@ -139,32 +140,33 @@
       </div>
     </section>
 
-    <!-- Chapter 3: Duration -->
+    <!-- Chapter 3 -->
     <section class="chapter">
       <div class="chapter-grid">
         <div class="chapter-text">
           <p class="chapter-kicker">Chapter 3 / Length</p>
-          <h2 class="chapter-title">Hit songs keep getting shorter</h2>
+          <h2 class="chapter-title">Hit songs keep shrinking</h2>
+
           <p class="chapter-body">
-            Early two thousands singles often ran longer than four minutes, a
-            format that worked for radio programming and slow build ballads.
-            Streaming platforms reward repeat plays instead. Shorter tracks can
-            deliver more streams in the same listening window.
+            In the early 2000s, four-minute ballads and pop anthems dominated radio. 
+            Streaming changed the incentive structure. Shorter songs generate more plays in the same amount of time, 
+            and more plays mean more visibility on algorithmic charts.
           </p>
+
           <p class="chapter-body">
-            The chart shows the average track length in minutes. The marker for
-            "Breathe" shows that its four minute running time is now an outlier.
+            The chart tracks average song length over time. “Breathe,” at over four minutes, 
+            now sits far outside the modern norm.
           </p>
+
           <p class="chapter-body" id="fh-length-note">
-            Long for today’s single driven landscape.
+            Long for today’s single-driven landscape.
           </p>
         </div>
+
         <div class="chapter-chart">
           <div class="chart-card">
-            <p class="chart-label">Average song length, 2000 to 2024</p>
-            <p class="chart-sub">
-              The dot shows the duration of "Breathe" in minutes.
-            </p>
+            <p class="chart-label">Song length, 2000–2024</p>
+            <p class="chart-sub">Average duration in minutes. “Breathe” shown as a highlighted point.</p>
             <div class="chart-wrapper">
               <canvas id="durationChart"></canvas>
             </div>
@@ -173,31 +175,29 @@
       </div>
     </section>
 
-    <!-- Chapter 4: Loudness -->
+    <!-- Chapter 4 -->
     <section class="chapter">
       <div class="chapter-grid">
         <div class="chapter-text">
           <p class="chapter-kicker">Chapter 4 / Loudness</p>
-          <h2 class="chapter-title">The long fight for loudness plateaus</h2>
+          <h2 class="chapter-title">The loudness war levels off</h2>
+
           <p class="chapter-body">
-            For years mastering engineers pushed tracks louder to stand out on
-            radio and CD. This practice, often called the loudness war, filled
-            waves with dense and compressed mixes. Streaming platforms later added
-            volume normalization, which levels playback, but the aesthetic of
-            high impact, high density sound remains.
+            For decades, mastering engineers pushed tracks louder to stand out on radio and CDs, 
+            leading to what became known as the loudness war. Streaming services introduced 
+            playback normalization, blunting the incentive to boost volume.
           </p>
+
           <p class="chapter-body">
-            "Breathe" was not mastered as aggressively as many recent hits. In a
-            normalized streaming context it would still be audible, but its softer
-            profile might feel less immediate next to modern pop and hip hop.
+            “Breathe” arrives from a pre-normalization era. Compared with current hits, 
+            it sits on the softer end of the spectrum. Not inaudible, but less forceful than many modern mixes.
           </p>
         </div>
+
         <div class="chapter-chart">
           <div class="chart-card">
-            <p class="chart-label">Average loudness in decibels</p>
-            <p class="chart-sub">
-              Lower values are quieter. The point shows the loudness of "Breathe".
-            </p>
+            <p class="chart-label">Average loudness (dB)</p>
+            <p class="chart-sub">Lower values reflect quieter masters. “Breathe” shown in gold.</p>
             <div class="chart-wrapper">
               <canvas id="loudnessChart"></canvas>
             </div>
@@ -206,32 +206,29 @@
       </div>
     </section>
 
-    <!-- Chapter 5: Energy and Danceability -->
+    <!-- Chapter 5 -->
     <section class="chapter">
       <div class="chapter-grid">
         <div class="chapter-text">
-          <p class="chapter-kicker">Chapter 5 / Energy and movement</p>
-          <h2 class="chapter-title">Intensity stays high while movement shifts</h2>
+          <p class="chapter-kicker">Chapter 5 / Energy & movement</p>
+          <h2 class="chapter-title">High energy endures, but movement evolves</h2>
+
           <p class="chapter-body">
-            Spotify's energy and danceability measures describe how intense a track
-            feels and how easy it is to move to it. This dual line chart follows
-            both values across time. The two golden points show where "Breathe"
-            lands on each scale.
+            Spotify’s energy metric reflects intensity. Danceability measures rhythmic clarity and ease of movement.
+            The dual chart tracks both over time, revealing consistent energy but rising danceability 
+            as hip hop and electronic pop take center stage.
           </p>
+
           <p class="chapter-body">
-            Energy levels have stayed fairly strong across the period, but
-            danceability rises in the 2010s as rhythmic hip hop and electronic
-            pop dominate the charts. "Breathe" has respectable energy yet more
-            modest danceability compared to many recent songs designed for clubs,
-            challenges, and short form video.
+            “Breathe” carries strong early-2000s energy but modest danceability compared to today’s 
+            rhythm-forward, challenge-friendly tracks.
           </p>
         </div>
+
         <div class="chapter-chart">
           <div class="chart-card">
-            <p class="chart-label">Average energy and danceability</p>
-            <p class="chart-sub">
-              Lines show yearly averages. Markers show the position of "Breathe" on each scale.
-            </p>
+            <p class="chart-label">Energy & danceability over time</p>
+            <p class="chart-sub">Two trend lines, each with “Breathe” marked at its 2000 level.</p>
             <div class="chart-wrapper">
               <canvas id="energyDanceChart"></canvas>
             </div>
@@ -240,32 +237,29 @@
       </div>
     </section>
 
-    <!-- Chapter 6: Mood -->
+    <!-- Chapter 6 -->
     <section class="chapter">
       <div class="chapter-grid">
         <div class="chapter-text">
           <p class="chapter-kicker">Chapter 6 / Mood drift</p>
-          <h2 class="chapter-title">Popular music grows less bright on average</h2>
+          <h2 class="chapter-title">Popular music grows less bright</h2>
+
           <p class="chapter-body">
-            Several studies argue that popular music sounds less positive today
-            than it did at the start of the century. Spotify's valence feature
-            offers a way to see that shift numerically. Higher values indicate
-            brighter, more cheerful sounding songs.
+            Valence is Spotify’s proxy for musical positivity. Across the 2000s and 2010s, 
+            average valence trends downward as darker textures, introspective lyrics, 
+            and moodier production move into mainstream pop.
           </p>
+
           <p class="chapter-body">
-            The line on the right leans downward through the late two thousands
-            and early two thousand tens, when emo influenced hip hop, darker
-            electronic textures, and introspective pop move to the center of the
-            charts. "Breathe" sits on the upper side of that scale, which would
-            make it stand out as unusually optimistic in many modern playlists.
+            On this scale, “Breathe” appears warmer and brighter than many modern hits — 
+            a reminder of how cheerful early-2000s pop often sounded.
           </p>
         </div>
+
         <div class="chapter-chart">
           <div class="chart-card">
-            <p class="chart-label">Average musical brightness, 2000 to 2024</p>
-            <p class="chart-sub">
-              The highlight marks the valence of "Breathe" against the broader trend.
-            </p>
+            <p class="chart-label">Average musical brightness</p>
+            <p class="chart-sub">Valence trends from 2000–2024 with “Breathe” highlighted.</p>
             <div class="chart-wrapper">
               <canvas id="valenceChart"></canvas>
             </div>
@@ -274,89 +268,89 @@
       </div>
     </section>
 
-    <!-- Chapter 7: Genre fingerprints -->
+    <!-- Chapter 7 -->
     <section class="chapter">
       <div class="chapter-grid">
+
         <div class="chapter-text">
-          <p class="chapter-kicker">Chapter 7 / Genres</p>
-          <h2 class="chapter-title">Every style carries its own audio fingerprint</h2>
+          <p class="chapter-kicker">Chapter 7 / Genre fingerprints</p>
+          <h2 class="chapter-title">Each genre carries its own signature</h2>
+
           <p class="chapter-body">
-            Grouping the dataset into broad genres reveals familiar patterns.
-            Hip hop leans high in danceability. Rock carries stronger average
-            energy. Country and pop sit nearer the center, often with brighter
-            moods and more acoustic instruments.
+            Grouping the dataset by broad genres reveals distinct patterns: hip hop tends toward high danceability, 
+            rock leans energetic, and pop occupies a balanced middle. Country, including Faith Hill’s work, 
+            often sits slightly brighter and more acoustic.
           </p>
+
           <p class="chapter-body">
-            Faith Hill's song blends country and pop traits. It fits the energy
-            and valence profile of country hits from the early 2000s, but the
-            overall charts have shifted toward hip hop and hybrid pop that sound
-            quite different from this palette.
+            “Breathe” reflects that early-2000s country-pop blend. But today’s charts skew toward 
+            hybrid pop and hip hop sounds, making its production feel like a throwback.
           </p>
         </div>
+
         <div class="chapter-chart">
           <div class="chart-card">
-            <p class="chart-label">Average audio features by genre</p>
-            <p class="chart-sub">
-              Bars compare energy, danceability, and valence for broad genre groups.
-            </p>
+            <p class="chart-label">Audio traits by genre</p>
+            <p class="chart-sub">Energy, danceability, and brightness for major genres.</p>
             <div class="chart-wrapper">
               <canvas id="genreChart"></canvas>
             </div>
           </div>
         </div>
+
       </div>
     </section>
 
-    <!-- Chapter 8: Side by side verdict -->
+    <!-- Chapter 8 -->
     <section class="chapter chapter-final">
       <div class="chapter-grid">
+
         <div class="chapter-text">
           <p class="chapter-kicker">Chapter 8 / Verdict</p>
-          <h2 class="chapter-title">Would "Breathe" still be a hit?</h2>
+          <h2 class="chapter-title">Would “Breathe” chart today?</h2>
+
           <p class="chapter-body">
-            The final two charts bring everything together. The first compares the
-            musical structure of "Breathe" against the typical 2020s hit. The
-            second compares their emotional profile: energy, danceability, mood,
-            and acousticness.
+            The final comparison brings everything together. The first chart aligns musical structure: 
+            tempo, loudness, and length. The second compares emotional and production traits: 
+            energy, danceability, brightness, and acousticness.
           </p>
+
           <p class="chapter-body">
-            On nearly every dimension, "Breathe" sits to the side of the cluster.
-            It is faster, longer, quieter, and more acoustic. It is also brighter
-            and slightly less dance focused than many current number ones. That
-            does not mean the song is weak. It means that the market around it has
-            moved.
+            Across the board, “Breathe” sits outside the cluster of modern hits. 
+            It is faster, longer, quieter, and more acoustic. It is also brighter and slightly less rhythm-centered. 
+            None of these qualities make it worse — they simply make it from a different era.
           </p>
+
           <div class="chapter-note">
             <p>
-              The original version would likely feel nostalgic rather than
-              contemporary if it appeared on the charts today. A remix that trims
-              the length, boosts loudness, and leans into modern drum and bass
-              choices might have a better shot at repeating its earlier success.
+              A faithful re-release today might feel nostalgic rather than contemporary. 
+              A remix that trims length, boosts loudness, and updates its rhythm might have a stronger shot 
+              at repeating its earlier success.
             </p>
           </div>
         </div>
+
         <div class="chapter-chart final-charts">
           <div class="chart-card final-chart-card">
             <p class="chart-label">Musical structure comparison</p>
-            <p class="chart-sub">
-              Tempo, length, and loudness, normalized for comparison.
-            </p>
+            <p class="chart-sub">Tempo, length, and loudness normalized for comparison.</p>
             <div class="chart-wrapper">
               <canvas id="musicalStructureChart"></canvas>
             </div>
           </div>
+
           <div class="chart-card final-chart-card">
-            <p class="chart-label">Emotional and production profile</p>
-            <p class="chart-sub">
-              Energy, danceability, valence, and acousticness for "Breathe" and a typical 2020s hit.
-            </p>
+            <p class="chart-label">Emotional & production profile</p>
+            <p class="chart-sub">Energy, danceability, valence, and acousticness.</p>
             <div class="chart-wrapper">
               <canvas id="emotionalProfileChart"></canvas>
             </div>
           </div>
         </div>
+
       </div>
     </section>
+
   </main>
 
   <!-- FOOTER -->
