@@ -1133,19 +1133,25 @@ function drawEmotionalProfileChart(faith, avg) {
 
   const labels = ['Energy', 'Danceability', 'Valence', 'Acousticness'];
 
-  const faithData = [
-    faith.energy,
-    faith.danceability,
-    faith.valence,
-    faith.acousticness
-  ];
+  // Normalize acousticness to improve visual readability
+function normAcoustic(x) {
+  return x / 0.30;  // 0.30 ≈ upper bound for most chart pop
+}
 
-  const avgData = [
-    avg.energy,
-    avg.danceability,
-    avg.valence,
-    avg.acousticness
-  ];
+const faithData = [
+  faith.energy,
+  faith.danceability,
+  faith.valence,
+  normAcoustic(faith.acousticness)   // normalized
+];
+
+const avgData = [
+  avg.energy,
+  avg.danceability,
+  avg.valence,
+  normAcoustic(avg.acousticness)     // normalized
+];
+
 
   new Chart(canvas, {
     type: 'bar',
