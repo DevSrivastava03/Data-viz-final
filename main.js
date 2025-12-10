@@ -579,7 +579,7 @@ function updateFaithText(faith, avg2020s) {
 
   if (lengthNoteEl && avg2020s) {
     if (faith.duration_ms > avg2020s.duration_ms + 30000) {
-      lengthNoteEl.textContent = 'Long for today\'s single-driven landscape.';
+      // lengthNoteEl.textContent = 'Long for today\'s single-driven landscape.';
     } else if (faith.duration_ms < avg2020s.duration_ms - 30000) {
       lengthNoteEl.textContent = 'Shorter than a typical modern hit.';
     } else {
